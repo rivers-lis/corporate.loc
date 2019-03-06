@@ -1,7 +1,8 @@
 <?php
-/**
- * Created by PhpStorm.
- * User: Михаил
- * Date: 24.02.2019
- * Time: 19:42
- */
+
+return [
+	'slider_path' => 'slider-cycle',
+	'home_port_count' => 5
+];
+
+?>

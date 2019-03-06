@@ -4,6 +4,8 @@ namespace Corp\Providers;
 
 use Illuminate\Support\ServiceProvider;
 
+use Blade;
+
 class AppServiceProvider extends ServiceProvider
 {
     /**
@@ -13,7 +15,11 @@ class AppServiceProvider extends ServiceProvider
      */
     public function boot()
     {
-        //
+    	// @set($i,10)
+        Blade::directive('set', function ($exp) {
+        	list($name,$val) = explode(',',$exp);
+        	return "<?php $name = $val ?>";
+        });
     }
 
     /**
