@@ -37,13 +37,17 @@ class SiteController extends Controller
 
 	protected function renderOutput() {
 
-
 		$menu = $this->getMenu();
 
 		//dd($menu);
 
 		$navigation = view(env('THEME').'.navigation')->with('menu',$menu)->render();
 		$this->vars = array_add($this->vars,'navigation',$navigation);
+
+		if ($this->contentRightBar) {
+			$rightBar = view(env('THEME').'.rightBar')->with('content_rightBar',$this->contentRightBar)->render();
+			$this->vars = array_add($this->vars,'rightBar',$rightBar);
+		}
 
 		return view($this->template)->with($this->vars);
 	}
