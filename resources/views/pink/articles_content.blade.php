@@ -13,8 +13,8 @@
                         <img src="{{ asset(env('THEME')) }}/images/articles/{{ $article->img->max }}" alt="001" title="001" />
                     </div>
                     <p class="date">
-                        <span class="month">{{--{{ $article->created_at->format('M') }}--}}</span>
-                        <span class="day">{{--{{ $article->created_at->format('d') }}--}}</span>
+                        <span class="month">{{ $article->created_at->format('M') }}</span>
+                        <span class="day">{{ $article->created_at->format('d') }}</span>
                     </p>
                 </div>
                 <!-- post meta -->

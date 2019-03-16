@@ -10,7 +10,7 @@ use Corp\Repositories\SlidersRepository;
 use Corp\Repositories\PortfoliosRepository;
 use Corp\Repositories\ArticlesRepository;
 
-
+use Carbon\Carbon;
 use Config;
 
 class IndexController extends SiteController
@@ -124,7 +124,7 @@ class IndexController extends SiteController
 	 */
 	public function show($id)
 	{
-		//
+		echo Carbon::now()->toFormatDataString();
 	}
 
 	/**
