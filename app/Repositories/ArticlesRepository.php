@@ -2,11 +2,11 @@
 
 namespace Corp\Repositories;
 
-use Corp\Articles;
+use Corp\Article;
 
 class ArticlesRepository extends Repository{
 
-	public function __construct(Articles $articles) {
+	public function __construct(Article $articles) {
 		$this->model = $articles;
 	}
 
