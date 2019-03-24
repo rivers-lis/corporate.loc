@@ -31,16 +31,21 @@ class ArticlesController extends SiteController
 
 	public function index($cat_alias = FALSE)
 	{
+		$this->title = 'Блог';
+		$this->keywords = 'String';
+		$this->meta_desc = 'String';
 
 		$articles = $this->getArticles($cat_alias);
 
-		$content = view(env('THEME').'.articles_content')->with('articles', $articles)->render();
-		$this->vars = array_add($this->vars, 'content', $content);
+		$content = view(env('THEME').'.articles_content')->with('articles',$articles)->render();
+		$this->vars = array_add($this->vars,'content',$content);
 
-		$contents = $this->getComments(config('settings.recent_comments'));
+		$comments = $this->getComments(config('settings.recent_comments'));
 		$portfolios = $this->getPortfolios(config('settings.recent_portfolios'));
 
-		$this->contentRightBar = view(env('THEME').'.articlesBar')->with(['comments'=>$contents,'portfolios'=>$portfolios]);
+
+		$this->contentRightBar = view(env('THEME').'.articlesBar')->with(['comments' => $comments,'portfolios' => $portfolios]);
+
 
 		return $this->renderOutput();
 	}
@@ -49,7 +54,7 @@ class ArticlesController extends SiteController
 
 		$comments = $this->c_rep->get(['text','name','email','site','article_id','user_id'],$take);
 
-		if ($comments) {
+		if($comments) {
 			$comments->load('article','user');
 		}
 
@@ -57,28 +62,24 @@ class ArticlesController extends SiteController
 	}
 
 	public function getPortfolios($take) {
-
-		$portfolios = $this->p_rep->get(['title','text','alias','customer','img','filter_alias'],$take);
-
+		$portfolios = $this->p_rep->get(['title','text','alias','customer','img','filter_alias','keywords','meta_desc'],$take);
 		return $portfolios;
-
 	}
 
 	public function getArticles($alias = FALSE) {
 
 		$where = FALSE;
 
-		if ($alias) {
+		if($alias) {
 			// WHERE `alias` = $alias
-			$id = Category::select('id')->where('alias', $alias)->first()->id;
-			// WHERE `category_id` = $id
-			$where = ['category_id', $id];
-
+			$id = Category::select('id')->where('alias',$alias)->first()->id;
+			//WHERE `category_id` = $id
+			$where = ['category_id',$id];
 		}
 
-		$articles = $this->a_rep->get(['id', 'title', 'alias', 'created_at', 'img', 'desc', 'user_id', 'category_id'], FALSE, TRUE, $where);
+		$articles = $this->a_rep->get(['id','title','alias','created_at','img','desc','user_id','category_id'],FALSE,TRUE,$where);
 
-		if ($articles) {
+		if($articles) {
 			$articles->load('user','category','comments');
 		}
 
@@ -88,25 +89,30 @@ class ArticlesController extends SiteController
 
 	public function show($alias = FALSE) {
 
-		$article = $this->a_rep->one($alias,['comments'=>TRUE]);
+		$article = $this->a_rep->one($alias,['comments' => TRUE]);
 
-		if ($article) {
+		if($article) {
 			$article->img = json_decode($article->img);
 		}
 
 		//dd($article->comments->groupBy('parent_id'));
 
-		$content = view(env('THEME').'.article_content')->with('article',$article)->render();
-		$this->vars = array_add($this->vars, 'content', $content);
+		$this->title = $article->title;
+		$this->keywords = $article->keywords;
+		$this->meta_desc = $article->meta_desc;
 
-		$contents = $this->getComments(config('settings.recent_comments'));
+		$content = view(env('THEME').'.article_content')->with('article',$article)->render();
+		$this->vars = array_add($this->vars,'content',$content);
+
+
+		$comments = $this->getComments(config('settings.recent_comments'));
 		$portfolios = $this->getPortfolios(config('settings.recent_portfolios'));
 
-		$this->contentRightBar = view(env('THEME').'.articlesBar')->with(['comments'=>$contents,'portfolios'=>$portfolios]);
+
+		$this->contentRightBar = view(env('THEME').'.articlesBar')->with(['comments' => $comments,'portfolios' => $portfolios]);
 
 
 		return $this->renderOutput();
-
 	}
 
 }
